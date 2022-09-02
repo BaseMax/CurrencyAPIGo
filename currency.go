@@ -65,8 +65,10 @@ type Gold struct {
 }
 
 func GetCurrency(name string) (*Currency, error) {
-	currencies := GetCurrencies()
-
+	currencies, err := GetCurrencies()
+	if err != nil {
+		return nil, err
+	}
 	sell, err := strconv.Atoi(currencies[name+"1"])
 	if err != nil {
 		return nil, err
@@ -86,7 +88,10 @@ func GetCurrency(name string) (*Currency, error) {
 }
 
 func GetCoin(name string) (*Coin, error) {
-	currencies := GetCurrencies()
+	currencies, err := GetCurrencies()
+	if err != nil {
+		return nil, err
+	}
 
 	sell, err := strconv.Atoi(currencies[name])
 	if err != nil {
@@ -106,7 +111,10 @@ func GetCoin(name string) (*Coin, error) {
 }
 
 func GetGold(name string) (*Gold, error) {
-	currencies := GetCurrencies()
+	currencies, err := GetCurrencies()
+	if err != nil {
+		return nil, err
+	}
 
 	price, err := strconv.Atoi(currencies[name])
 	if err != nil {

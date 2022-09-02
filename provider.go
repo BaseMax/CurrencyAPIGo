@@ -9,7 +9,16 @@ import (
 	curl "github.com/andelf/go-curl"
 )
 
-func GetCurrencies() map[string]string {
+func GetCurrencies() (map[string]string, error) {
+	result, err := LoadDataFromCache("currencies")
+	if err != nil {
+		return nil, err
+	}
+
+	if result != nil {
+		return result, nil
+	}
+
 	urlPage := "https://bonbast.com/"
 	urlJson := "https://bonbast.com/json"
 
@@ -19,8 +28,15 @@ func GetCurrencies() map[string]string {
 		log.Panicln(err)
 	}
 
-	res := loadJsonData(urlJson, key)
-	return res
+	jsonData := loadJsonData(urlJson, key)
+
+	_, err = CacheData("currencies", jsonData, 180)
+	if err != nil {
+		return result, err
+	}
+
+	json.Unmarshal([]byte(jsonData), &result)
+	return result, nil
 }
 
 func loadHtmlPage(url string) string {
@@ -61,13 +77,13 @@ func loadHtmlPage(url string) string {
 
 }
 
-func loadJsonData(url string, key string) map[string]string {
-	var jsonData string
+func loadJsonData(url string, key string) string {
+	var result string
 	ret := curl.EasyInit()
 	defer ret.Cleanup()
 
 	fn := func(buf []byte, userdata any) bool {
-		jsonData = string(buf)
+		result = string(buf)
 		return true
 	}
 
@@ -104,8 +120,6 @@ func loadJsonData(url string, key string) map[string]string {
 	ret.Setopt(curl.OPT_WRITEFUNCTION, fn)
 
 	ret.Perform()
-	result := map[string]string{}
-	json.Unmarshal([]byte(jsonData), &result)
 
 	return result
 }
