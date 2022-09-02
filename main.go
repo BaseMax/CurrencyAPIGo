@@ -14,7 +14,7 @@ func main() {
 	status := rdb.Ping(ctx)
 	ok, _ := status.Result()
 	if ok != "PONG" {
-		log.Panic("can not connect to redis")
+		log.Panic("Error: Can not connect to redis server!")
 	}
 
 	http.HandleFunc("/", RootHandler)
