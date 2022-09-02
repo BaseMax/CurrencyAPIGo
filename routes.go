@@ -25,12 +25,10 @@ func CurrencyHandler(w http.ResponseWriter, req *http.Request) {
 
 	*/
 	name := req.URL.Query().Get("q")
-
 	if name == "" {
 		w.Write([]byte("currencies"))
 		return
 	}
-
 	name = strings.ToLower(name)
 
 	golds := []string{"bitcoin", "ounce", "mithqal", "gram"}
@@ -46,7 +44,6 @@ func CurrencyHandler(w http.ResponseWriter, req *http.Request) {
 		json.NewEncoder(w).Encode(g)
 		return
 	}
-
 	if slices.Contains(coins, name) {
 		c, err := GetCoin(name)
 		if err != nil {
@@ -64,6 +61,6 @@ func CurrencyHandler(w http.ResponseWriter, req *http.Request) {
 		w.Write([]byte("not found"))
 		return
 	}
-	json.NewEncoder(w).Encode(uc)
 
+	json.NewEncoder(w).Encode(uc)
 }
