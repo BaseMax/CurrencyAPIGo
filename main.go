@@ -11,6 +11,13 @@ const (
 )
 
 func main() {
+
+	status := rdb.Ping(ctx)
+	ok, _ := status.Result()
+	if ok != "PONG" {
+		log.Panic("can not connect to redis")
+	}
+
 	http.HandleFunc("/", RootHandler)
 	http.HandleFunc("/price", CurrencyHandler)
 
