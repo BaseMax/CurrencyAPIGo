@@ -74,7 +74,6 @@ func loadHtmlPage(url string) string {
 	ret.Perform()
 
 	return result
-
 }
 
 func loadJsonData(url string, key string) string {
