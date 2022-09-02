@@ -1,10 +1,10 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"regexp"
+	"encoding/json"
 
 	curl "github.com/andelf/go-curl"
 )
