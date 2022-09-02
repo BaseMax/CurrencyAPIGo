@@ -1,9 +1,9 @@
 package main
 
 import (
+	"time"
 	"context"
 	"encoding/json"
-	"time"
 
 	"github.com/go-redis/redis/v9"
 )
