@@ -1,40 +1,41 @@
 package main
 
 import (
+	"context"
 	"strconv"
 	"strings"
 )
 
 var (
-	Currencies map[string][2]string = map[string][2]string{
-		"usd": {"USD", "US Dollar"},
-		"eur": {"EUR", "Euro"},
-		"gbp": {"GBP", "British Pound"},
-		"chf": {"CHF", "Swiss Franc"},
-		"cad": {"CAD", "Canadian Dollar"},
-		"aud": {"AUD", "Australian Dollar"},
-		"sek": {"SEK", "Swedish Krona"},
-		"nok": {"NOK", "Norwegian Krone"},
-		"rub": {"RUB", "Russian Ruble"},
-		"thb": {"THB", "Thai Baht"},
-		"sgd": {"SGD", "Singapore Dollar"},
-		"hkd": {"HKD", "Hong Kong Dollar"},
-		"azn": {"AZN", "Azerbaijani Manat"},
-		"amd": {"AMD", "Armenian Dram"},
-		"dkk": {"DKK", "Danish Krone"},
-		"aed": {"AED", "UAE Dirham"},
-		"jpy": {"JPY", "Japanese Yen"},
-		"try": {"TRY", "Turkish Lira"},
-		"cny": {"CNY", "Chinese Yuan"},
-		"sar": {"SAR", "KSA Rial"},
-		"inr": {"INR", "Indian Rupee"},
-		"myr": {"MYR", "Ringgit"},
-		"afn": {"AFN", "Afghan Afghani"},
-		"kwd": {"KWD", "Kuwaiti Dinar"},
-		"iqd": {"IQD", "Iraqi Dinar"},
-		"bhd": {"BHD", "Bahraini Dinar"},
-		"omr": {"OMR", "Omani Rial"},
-		"qar": {"QAR", "Qatari Rial"},
+	Currencies map[string]string = map[string]string{
+		"usd": "US Dollar",
+		"eur": "Euro",
+		"gbp": "British Pound",
+		"chf": "Swiss Franc",
+		"cad": "Canadian Dollar",
+		"aud": "Australian Dollar",
+		"sek": "Swedish Krona",
+		"nok": "Norwegian Krone",
+		"rub": "Russian Ruble",
+		"thb": "Thai Baht",
+		"sgd": "Singapore Dollar",
+		"hkd": "Hong Kong Dollar",
+		"azn": "Azerbaijani Manat",
+		"amd": "Armenian Dram",
+		"dkk": "Danish Krone",
+		"aed": "UAE Dirham",
+		"jpy": "Japanese Yen",
+		"try": "Turkish Lira",
+		"cny": "Chinese Yuan",
+		"sar": "KSA Rial",
+		"inr": "Indian Rupee",
+		"myr": "Ringgit",
+		"afn": "Afghan Afghani",
+		"kwd": "Kuwaiti Dinar",
+		"iqd": "Iraqi Dinar",
+		"bhd": "Bahraini Dinar",
+		"omr": "Omani Rial",
+		"qar": "Qatari Rial",
 	}
 
 	Coins map[string]string = map[string]string{
@@ -64,8 +65,8 @@ type Gold struct {
 	Price int
 }
 
-func GetCurrency(name string) (*Currency, error) {
-	currencies, err := GetCurrencies()
+func GetCurrency(ctx context.Context, name string) (*Currency, error) {
+	currencies, err := GetCurrencies(ctx)
 	if err != nil || currencies == nil {
 		return nil, err
 	}
@@ -81,15 +82,15 @@ func GetCurrency(name string) (*Currency, error) {
 	}
 
 	return &Currency{
-		Code: Currencies[name][0],
-		Name: Currencies[name][1],
+		Code: strings.ToTitle(name),
+		Name: Currencies[name],
 		Sell: sell,
 		Buy:  buy,
 	}, nil
 }
 
-func GetCoin(name string) (*Coin, error) {
-	currencies, err := GetCurrencies()
+func GetCoin(ctx context.Context, name string) (*Coin, error) {
+	currencies, err := GetCurrencies(ctx)
 	if err != nil || currencies == nil {
 		return nil, err
 	}
@@ -111,8 +112,8 @@ func GetCoin(name string) (*Coin, error) {
 	}, nil
 }
 
-func GetGold(name string) (*Gold, error) {
-	currencies, err := GetCurrencies()
+func GetGold(ctx context.Context, name string) (*Gold, error) {
+	currencies, err := GetCurrencies(ctx)
 	if err != nil || currencies == nil {
 		return nil, err
 	}
