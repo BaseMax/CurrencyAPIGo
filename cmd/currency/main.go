@@ -4,17 +4,19 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"net/http"
 	"os"
 
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-redis/redis/v9"
+	"github.com/itsjoniur/currency/api"
 	"github.com/joho/godotenv"
 )
 
 const (
 	port = "8000"
+)
+
+var (
+	ctx = context.Background()
 )
 
 func main() {
@@ -35,26 +37,6 @@ func main() {
 		log.Panic("can not connect to redis")
 	}
 
-	r := chi.NewRouter()
+	api.StartAPI(rdb, port)
 
-	r.Use(middleware.Logger)
-	r.Use(RedisMiddleware(rdb))
-	r.Use(middleware.Recoverer)
-
-	r.Get("/", RootHandler)
-	r.Get("/price", CurrencyHandler)
-
-	fmt.Printf("Server running on port %s...\n", port)
-	if err := http.ListenAndServe(fmt.Sprintf(":%s", port), r); err != nil {
-		log.Panicln(err)
-	}
-}
-
-func RedisMiddleware(storage *redis.Client) func(http.Handler) http.Handler {
-	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-			ctx := context.WithValue(req.Context(), 1, storage)
-			next.ServeHTTP(w, req.WithContext(ctx))
-		})
-	}
 }
