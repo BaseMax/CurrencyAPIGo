@@ -1,4 +1,4 @@
-package main
+package utils
 
 func MapKeyToSlice[T comparable](m map[T]T) []T {
 	keys := make([]T, 0, len(m))
