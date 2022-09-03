@@ -33,11 +33,11 @@ func CurrencyHandler(w http.ResponseWriter, req *http.Request) {
 
 	name = strings.ToLower(name)
 
-	golds := []string{"bitcoin", "ounce", "mithqal", "gram"}
-	coins := []string{"azadi1", "azadi1_2", "azadi_4", "emami", "azadi1g"}
+	// 	golds := []string{"bitcoin", "ounce", "mithqal", "gram"}
+	// 	coins := []string{"azadi1", "azadi1_2", "azadi_4", "emami", "azadi1g"}
 
-	if slices.Contains(golds, name) {
-		g, err := GetGold(name)
+	if slices.Contains(MapKeyToSlice(Currencies), name) {
+		g, err := GetCurrency(req.Context(), name)
 		if err != nil {
 			fmt.Println(err)
 			w.Write([]byte("not found"))
@@ -45,8 +45,8 @@ func CurrencyHandler(w http.ResponseWriter, req *http.Request) {
 		}
 		json.NewEncoder(w).Encode(g)
 		return
-	} else if slices.Contains(coins, name) {
-		c, err := GetCoin(name)
+	} else if slices.Contains(MapKeyToSlice(Coins), name) {
+		c, err := GetCoin(req.Context(), name)
 		if err != nil {
 			fmt.Println(err)
 			w.Write([]byte("not found"))
@@ -54,14 +54,13 @@ func CurrencyHandler(w http.ResponseWriter, req *http.Request) {
 		}
 		json.NewEncoder(w).Encode(c)
 		return
+	} else {
+		uc, err := GetGold(req.Context(), name)
+		if err != nil {
+			w.Write([]byte("not found"))
+			return
+		}
+		json.NewEncoder(w).Encode(uc)
 	}
-
-	uc, err := GetCurrency(name)
-	if err != nil {
-		fmt.Println(err)
-		w.Write([]byte("not found"))
-		return
-	}
-	json.NewEncoder(w).Encode(uc)
 
 }
