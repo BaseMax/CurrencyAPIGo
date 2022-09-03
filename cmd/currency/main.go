@@ -9,6 +9,9 @@ import (
 	"github.com/go-redis/redis/v9"
 	"github.com/itsjoniur/currency/api"
 	"github.com/joho/godotenv"
+	"github.com/sirupsen/logrus"
+
+	"github.com/itsjoniur/currency/internal/utils"
 )
 
 const (
@@ -37,6 +40,8 @@ func main() {
 		log.Panic("can not connect to redis")
 	}
 
-	api.StartAPI(rdb, port)
+	logger := utils.NewLogger(logrus.New())
+
+	api.StartAPI(logger, rdb, port)
 
 }
