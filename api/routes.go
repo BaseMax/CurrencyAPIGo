@@ -2,12 +2,13 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strings"
 
 	"github.com/itsjoniur/currency/internal/providers"
+	"github.com/itsjoniur/currency/internal/responses"
 	"github.com/itsjoniur/currency/pkg/utils"
+
 	"golang.org/x/exp/slices"
 )
 
@@ -35,23 +36,17 @@ func CurrencyHandler(w http.ResponseWriter, req *http.Request) {
 
 	name = strings.ToLower(name)
 
-	// 	golds := []string{"bitcoin", "ounce", "mithqal", "gram"}
-	// 	coins := []string{"azadi1", "azadi1_2", "azadi_4", "emami", "azadi1g"}
-
 	if slices.Contains(utils.MapKeyToSlice(providers.Currencies), name) {
 		g, err := providers.GetCurrency(req.Context(), name)
 		if err != nil {
-			fmt.Println(err)
-			w.Write([]byte("not found"))
-			return
+			responses.NotFoundError(req.Context(), w)
 		}
 		json.NewEncoder(w).Encode(g)
 		return
 	} else if slices.Contains(utils.MapKeyToSlice(providers.Coins), name) {
 		c, err := providers.GetCoin(req.Context(), name)
 		if err != nil {
-			fmt.Println(err)
-			w.Write([]byte("not found"))
+			responses.NotFoundError(req.Context(), w)
 			return
 		}
 		json.NewEncoder(w).Encode(c)
@@ -59,7 +54,7 @@ func CurrencyHandler(w http.ResponseWriter, req *http.Request) {
 	} else {
 		uc, err := providers.GetGold(req.Context(), name)
 		if err != nil {
-			w.Write([]byte("not found"))
+			responses.NotFoundError(req.Context(), w)
 			return
 		}
 		json.NewEncoder(w).Encode(uc)
