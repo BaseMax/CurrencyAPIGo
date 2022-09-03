@@ -11,7 +11,6 @@ const (
 )
 
 func main() {
-
 	status := rdb.Ping(ctx)
 	ok, _ := status.Result()
 	if ok != "PONG" {

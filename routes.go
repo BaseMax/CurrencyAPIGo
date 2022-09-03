@@ -45,9 +45,7 @@ func CurrencyHandler(w http.ResponseWriter, req *http.Request) {
 		}
 		json.NewEncoder(w).Encode(g)
 		return
-	}
-
-	if slices.Contains(coins, name) {
+	} else if slices.Contains(coins, name) {
 		c, err := GetCoin(name)
 		if err != nil {
 			fmt.Println(err)
