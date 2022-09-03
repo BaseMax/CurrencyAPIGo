@@ -10,18 +10,12 @@ import (
 
 var (
 	ctx = context.Background()
-
-	rdb = redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Password: "",
-		DB:       0,
-	})
 )
 
-func LoadDataFromCache(key string) (map[string]string, error) {
+func LoadDataFromCache(storage *redis.Client, key string) (map[string]string, error) {
 	result := map[string]string{}
 
-	val, err := rdb.Get(ctx, key).Result()
+	val, err := storage.Get(ctx, key).Result()
 	if err == redis.Nil {
 		return nil, nil
 	} else if err != nil {
@@ -32,16 +26,16 @@ func LoadDataFromCache(key string) (map[string]string, error) {
 	return result, nil
 }
 
-func CacheData(key string, value any, ttl time.Duration) (bool, error) {
-	err := rdb.Set(ctx, key, value, 0).Err()
+func CacheData(storage *redis.Client, key string, value any, ttl time.Duration) (bool, error) {
+	err := storage.Set(ctx, key, value, 0).Err()
 	if err != nil {
 		return false, err
 	}
 
-	exp := rdb.Expire(ctx, key, ttl*time.Second)
+	exp := storage.Expire(ctx, key, ttl*time.Second)
 	ok, _ := exp.Result()
 	if ok == false {
-		rdb.Del(ctx, key)
+		storage.Del(ctx, key)
 		return ok, err
 	}
 
