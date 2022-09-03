@@ -1,4 +1,4 @@
-package main
+package providers
 
 import (
 	"context"
@@ -9,12 +9,13 @@ import (
 
 	curl "github.com/andelf/go-curl"
 	"github.com/go-redis/redis/v9"
+	"github.com/itsjoniur/currency/internal/utils"
 )
 
 func GetCurrencies(ctx context.Context) (map[string]string, error) {
 	storage := ctx.Value(1).(*redis.Client)
 
-	result, err := LoadDataFromCache(storage, "currencies")
+	result, err := utils.LoadDataFromCache(storage, "currencies")
 	if err != nil {
 		return nil, err
 	}
@@ -34,7 +35,7 @@ func GetCurrencies(ctx context.Context) (map[string]string, error) {
 
 	jsonData := loadJsonData(urlJson, key)
 
-	_, err = CacheData(storage, "currencies", jsonData, 180)
+	_, err = utils.CacheData(storage, "currencies", jsonData, 180)
 	if err != nil {
 		return result, err
 	}
