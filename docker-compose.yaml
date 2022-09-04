@@ -1,0 +1,23 @@
+version: "3.8"
+services:
+  web:
+    build: .
+    depends_on:
+      - cache
+    ports:
+      - '8000:8000'
+    env_file:
+      - .env
+
+  cache:
+    image: redis:7.0.4-alpine3.16
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning
+    volumes:
+      - cache:/data
+
+volumes:
+  cache:
+    driver: local
