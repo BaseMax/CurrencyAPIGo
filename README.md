@@ -36,7 +36,7 @@ Example response:
 	   "eur": {
 		   "currency": "Euro",
 		   "sell": 30000,
-		   "buy": "29900
+		   "buy": 29900
 	   }
    },
    "coins" : {
