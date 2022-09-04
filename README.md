@@ -98,7 +98,7 @@ For a specific coin:
 } 
 ```
 
-For specific gold:
+For a specific gold:
 
 ```json
 {
