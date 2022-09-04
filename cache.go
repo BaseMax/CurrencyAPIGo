@@ -24,9 +24,7 @@ func LoadDataFromCache(key string) (map[string]string, error) {
 	val, err := rdb.Get(ctx, key).Result()
 	if err == redis.Nil {
 		return nil, nil
-	}
-
-	if err != nil {
+	} else if err != nil {
 		return nil, err
 	}
 
