@@ -42,8 +42,15 @@ var (
 		"azadi1":   "Azadi",
 		"azadi1_2": "Azadi 1/2",
 		"azadi1_4": "Azadi 1/4",
-		"emami":    "Emami",
+		"emami1":   "Emami",
 		"azadi1g":  "Gerami",
+	}
+
+	Golds map[string]string = map[string]string{
+		"gol18":   "Gram",
+		"mithqal": "Mithqal",
+		"ounce":   "Ounce",
+		"bitcoin": "Bitcoin",
 	}
 )
 
@@ -62,7 +69,7 @@ type Coin struct {
 
 type Gold struct {
 	Name  string
-	Price int
+	Price float64
 }
 
 func GetCurrency(ctx context.Context, name string) (*Currency, error) {
@@ -100,7 +107,7 @@ func GetCoin(ctx context.Context, name string) (*Coin, error) {
 		return nil, err
 	}
 
-	buy, err := strconv.Atoi(currencies[name+"_2"])
+	buy, err := strconv.Atoi(currencies[name+"2"])
 	if err != nil {
 		return nil, err
 	}
@@ -118,13 +125,13 @@ func GetGold(ctx context.Context, name string) (*Gold, error) {
 		return nil, err
 	}
 
-	price, err := strconv.Atoi(currencies[name])
+	price, err := strconv.ParseFloat(currencies[name], 64)
 	if err != nil {
 		return nil, err
 	}
 
 	return &Gold{
-		Name:  strings.ToTitle(name),
+		Name:  Golds[name],
 		Price: price,
 	}, nil
 }
