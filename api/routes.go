@@ -4,11 +4,11 @@ import (
 	"net/http"
 	"strings"
 
+	"golang.org/x/exp/slices"
+
+	"github.com/itsjoniur/currency/pkg/utils"
 	"github.com/itsjoniur/currency/internal/providers"
 	"github.com/itsjoniur/currency/internal/responses"
-	"github.com/itsjoniur/currency/pkg/utils"
-
-	"golang.org/x/exp/slices"
 )
 
 func RootHandler(w http.ResponseWriter, req *http.Request) {
@@ -55,5 +55,4 @@ func CurrencyHandler(w http.ResponseWriter, req *http.Request) {
 	} else {
 		responses.NotFoundError(req.Context(), w)
 	}
-
 }
