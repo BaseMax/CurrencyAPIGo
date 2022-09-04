@@ -39,7 +39,7 @@ This route will show this `README` to show the features of the projects to every
 
 `GET /price`
 
-This route will show currencies/currency price
+This route will show the currencies' prices.
 
 - STRING `q`  (optional)
 
@@ -71,7 +71,7 @@ Example response:
 }
 ```
 
-For a specific currency:
+For a specific **currency**:
 
 ```json
 {
@@ -85,7 +85,7 @@ For a specific currency:
 }  
 ```
 
-For a specific coin:
+For a specific **coin**:
 
 ```json
 {
@@ -98,7 +98,7 @@ For a specific coin:
 } 
 ```
 
-For a specific gold:
+For a specific **gold**:
 
 ```json
 {
