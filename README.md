@@ -1,23 +1,25 @@
 # Currency API Go
-Currency API - show currencies & coins price powered by Golang
+
+Currency API - show currencies & coins price powered by Golang and Redis.
 
 ## Dependencies
+
 - Golang 1.18+
 - Redis v7
 
 ## Getting started
 
 ```bash
-git clone https://github.com/itsjoniur/CurrencyAPIGo.git
-cd CurrencyAPIGo
+$ git clone https://github.com/itsjoniur/CurrencyAPIGo.git
+$ cd CurrencyAPIGo
 ```
 
 - Rename .env.example to .env
 - change the Redis info with yours
 
 ```bash
-cd ./cmd/currency
-go run main.go
+$ cd ./cmd/currency
+$ go run main.go
 ```
 
 OR
@@ -33,7 +35,7 @@ $ docker-compose up -d
 
 `GET /`
 
-This route will show this README to show the features of the projects to everyone.
+This route will show this `README` to show the features of the projects to everyone.
 
 `GET /price`
 
@@ -69,7 +71,7 @@ Example response:
 }
 ```
 
-For specific currency:
+For a specific currency:
 
 ```json
 {
@@ -83,7 +85,7 @@ For specific currency:
 }  
 ```
 
-For specific coin:
+For a specific coin:
 
 ```json
 {
