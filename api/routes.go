@@ -30,34 +30,39 @@ func CurrencyHandler(w http.ResponseWriter, req *http.Request) {
 	name := req.URL.Query().Get("q")
 
 	if name == "" {
-		w.Write([]byte("currencies"))
+		cs, err := providers.GetCurrencies(req.Context())
+		if err != nil {
+			responses.InternalServerError(req.Context(), w)
+			return
+		}
+		responses.RenderCurrenciesResponse(req.Context(), w, cs)
 		return
 	}
 
 	name = strings.ToLower(name)
 
 	if slices.Contains(utils.MapKeyToSlice(providers.Currencies), name) {
-		g, err := providers.GetCurrency(req.Context(), name)
+		currency, err := providers.GetCurrency(req.Context(), name)
 		if err != nil {
 			responses.NotFoundError(req.Context(), w)
 		}
-		json.NewEncoder(w).Encode(g)
+		responses.RenderCurrencyResponse(req.Context(), w, currency)
 		return
 	} else if slices.Contains(utils.MapKeyToSlice(providers.Coins), name) {
-		c, err := providers.GetCoin(req.Context(), name)
+		coin, err := providers.GetCoin(req.Context(), name)
 		if err != nil {
 			responses.NotFoundError(req.Context(), w)
 			return
 		}
-		json.NewEncoder(w).Encode(c)
+		responses.RenderCoinResponse(req.Context(), w, coin)
 		return
 	} else {
-		uc, err := providers.GetGold(req.Context(), name)
+		gold, err := providers.GetGold(req.Context(), name)
 		if err != nil {
 			responses.NotFoundError(req.Context(), w)
 			return
 		}
-		json.NewEncoder(w).Encode(uc)
+		json.NewEncoder(w).Encode(gold)
 	}
 
 }
