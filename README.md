@@ -15,6 +15,13 @@ cd CurrencyAPIGo
 cd ./cmd/currency
 go run main.go
 ```
+OR
+### Run as a docker container
+
+```bash
+$ docker-compose build --no-cache
+$ docker-compose up -d
+```
 ## Routes
 `GET /`
 This route will show this README to show the features of the projects to everyone.
