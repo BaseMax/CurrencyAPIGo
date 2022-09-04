@@ -1,10 +1,10 @@
 package main
 
 import (
-	"fmt"
-	"strings"
-	"net/http"
 	"encoding/json"
+	"fmt"
+	"net/http"
+	"strings"
 
 	"golang.org/x/exp/slices"
 )
