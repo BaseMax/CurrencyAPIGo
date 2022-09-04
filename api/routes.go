@@ -1,7 +1,6 @@
 package api
 
 import (
-	"encoding/json"
 	"net/http"
 	"strings"
 
@@ -17,16 +16,6 @@ func RootHandler(w http.ResponseWriter, req *http.Request) {
 }
 
 func CurrencyHandler(w http.ResponseWriter, req *http.Request) {
-	/*
-		NOTE: This function not completed and it is just created to show expected result to us
-		TODO(itsjoniur): fix map[any]any in MapKeyToSlice function
-		Why we need MapKeyToSlice function?
-		Answer:
-			we need this function to turn keys of a map as a slice
-			then check if the slice contains given query's value or not.
-			so we can know what type of currency want to get and we'll return it
-
-	*/
 	name := req.URL.Query().Get("q")
 
 	if name == "" {
@@ -56,13 +45,15 @@ func CurrencyHandler(w http.ResponseWriter, req *http.Request) {
 		}
 		responses.RenderCoinResponse(req.Context(), w, coin)
 		return
-	} else {
+	} else if slices.Contains(utils.MapKeyToSlice(providers.Golds), name) {
 		gold, err := providers.GetGold(req.Context(), name)
 		if err != nil {
 			responses.NotFoundError(req.Context(), w)
 			return
 		}
-		json.NewEncoder(w).Encode(gold)
+		responses.RenderGoldResponse(req.Context(), w, gold)
+	} else {
+		responses.NotFoundError(req.Context(), w)
 	}
 
 }

@@ -158,3 +158,14 @@ func RenderCurrencyResponse(ctx context.Context, w http.ResponseWriter, currency
 
 	r.JSON(w, http.StatusOK, res)
 }
+
+func RenderGoldResponse(ctx context.Context, w http.ResponseWriter, gold *providers.Gold) {
+	r := ctx.Value(3).(*render.Render)
+
+	res := GoldResponse{
+		Status: true,
+		Gold:   GoldDetail{}.Create(gold),
+	}
+
+	r.JSON(w, http.StatusOK, res)
+}
