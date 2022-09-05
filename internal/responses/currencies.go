@@ -3,11 +3,11 @@ package responses
 import (
 	"context"
 	"net/http"
-	"strings"
 
 	"github.com/itsjoniur/currency/internal/providers"
 	"github.com/itsjoniur/currency/pkg/utils"
 	"github.com/unrolled/render"
+	"golang.org/x/exp/slices"
 )
 
 type Currencies struct {
@@ -62,22 +62,21 @@ func (c Currencies) Create(currencies []*providers.Currency, coins []*providers.
 func (c *Currencies) CreateCurrencies(cs []*providers.Currency) {
 	c.Currencies = make(map[string]*CurrencyDetail)
 	for i := 0; i < len(cs); i++ {
-		c.Currencies[strings.ToLower(cs[i].Code)] = CurrencyDetail{}.Create(cs[i])
+		c.Currencies[cs[i].Code] = CurrencyDetail{}.Create(cs[i])
 	}
 }
 
 func (c *Currencies) CreateCoins(coins []*providers.Coin) {
 	c.Coins = make(map[string]*CoinDetail)
 	for i := 0; i < len(coins); i++ {
-		name := strings.Replace(strings.ToLower(coins[i].Name), " ", "", 1)
-		c.Coins[name] = CoinDetail{}.Create(coins[i])
+		c.Coins[coins[i].Code] = CoinDetail{}.Create(coins[i])
 	}
 }
 
 func (c *Currencies) CreateGolds(golds []*providers.Gold) {
 	c.Golds = make(map[string]*GoldDetail)
 	for i := 0; i < len(golds); i++ {
-		c.Golds[strings.ToLower(golds[i].Name)] = GoldDetail{}.Create(golds[i])
+		c.Golds[golds[i].Code] = GoldDetail{}.Create(golds[i])
 	}
 }
 
@@ -110,23 +109,15 @@ func RenderCurrenciesResponse(ctx context.Context, w http.ResponseWriter, curren
 	var golds []*providers.Gold
 	r := ctx.Value(3).(*render.Render)
 
-	for _, i := range utils.MapKeyToSlice(providers.Currencies) {
-		c, _ := providers.GetCurrency(ctx, i)
-		if c != nil {
+	for _, k := range utils.MapKeyToSlice(providers.CurrencyKeys) {
+		if slices.Contains(providers.CurrencyList, k) {
+			c, _ := providers.GetCurrency(ctx, k)
 			cs = append(cs, c)
-		}
-	}
-
-	for _, i := range utils.MapKeyToSlice(providers.Coins) {
-		c, _ := providers.GetCoin(ctx, i)
-		if c != nil {
-			coins = append(coins, c)
-		}
-	}
-
-	for _, i := range utils.MapKeyToSlice(providers.Golds) {
-		g, _ := providers.GetGold(ctx, i)
-		if g != nil {
+		} else if slices.Contains(providers.GoldCoinList, k) {
+			gc, _ := providers.GetCoin(ctx, k)
+			coins = append(coins, gc)
+		} else if slices.Contains(providers.GoldList, k) {
+			g, _ := providers.GetGold(ctx, k)
 			golds = append(golds, g)
 		}
 	}
