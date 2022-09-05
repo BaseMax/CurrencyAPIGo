@@ -15,6 +15,7 @@ type Currencies struct {
 	Currencies map[string]*CurrencyDetail `json:"Currencies"`
 	Coins      map[string]*CoinDetail     `json:"coins"`
 	Golds      map[string]*GoldDetail     `json:"golds"`
+	Cryptos    map[string]*CryptoDetail   `json:"cryptos"`
 	LastModify string                     `json:"last_modify"`
 }
 
@@ -31,6 +32,11 @@ type CoinResponse struct {
 type GoldResponse struct {
 	Status bool        `json:"status"`
 	Gold   *GoldDetail `json:"gold"`
+}
+
+type CryptoResponse struct {
+	Status bool          `json:"status"`
+	Crypto *CryptoDetail `json:"crypto"`
 }
 
 type CurrencyDetail struct {
@@ -50,11 +56,17 @@ type GoldDetail struct {
 	Price float64 `json:"price"`
 }
 
-func (c Currencies) Create(currencies []*providers.Currency, coins []*providers.Coin, golds []*providers.Gold, lastModify string) *Currencies {
+type CryptoDetail struct {
+	Name  string  `json:"name"`
+	Price float64 `json:"price"`
+}
+
+func (c Currencies) Create(currencies []*providers.Currency, coins []*providers.Coin, golds []*providers.Gold, cryptos []*providers.Crypto, lastModify string) *Currencies {
 	c.Status = true
 	c.CreateCurrencies(currencies)
 	c.CreateCoins(coins)
 	c.CreateGolds(golds)
+	c.CreateCryptos(cryptos)
 	c.LastModify = lastModify
 	return &c
 }
@@ -77,6 +89,13 @@ func (c *Currencies) CreateGolds(golds []*providers.Gold) {
 	c.Golds = make(map[string]*GoldDetail)
 	for i := 0; i < len(golds); i++ {
 		c.Golds[golds[i].Code] = GoldDetail{}.Create(golds[i])
+	}
+}
+
+func (c *Currencies) CreateCryptos(cryptos []*providers.Crypto) {
+	c.Cryptos = make(map[string]*CryptoDetail)
+	for i := 0; i < len(cryptos); i++ {
+		c.Cryptos[cryptos[i].Code] = CryptoDetail{}.Create(cryptos[i])
 	}
 }
 
@@ -103,10 +122,18 @@ func (c GoldDetail) Create(gold *providers.Gold) *GoldDetail {
 	return &c
 }
 
+func (c CryptoDetail) Create(crypto *providers.Crypto) *CryptoDetail {
+	c.Name = crypto.Name
+	c.Price = crypto.Price
+
+	return &c
+}
+
 func RenderCurrenciesResponse(ctx context.Context, w http.ResponseWriter, currencies map[string]string) {
 	var cs []*providers.Currency
 	var coins []*providers.Coin
 	var golds []*providers.Gold
+	var cryptos []*providers.Crypto
 	r := ctx.Value(3).(*render.Render)
 
 	for _, k := range utils.MapKeyToSlice(providers.CurrencyKeys) {
@@ -119,11 +146,14 @@ func RenderCurrenciesResponse(ctx context.Context, w http.ResponseWriter, curren
 		} else if slices.Contains(providers.GoldList, k) {
 			g, _ := providers.GetGold(ctx, k)
 			golds = append(golds, g)
+		} else if slices.Contains(providers.CryptoCurrencyList, k) {
+			cc, _ := providers.GetCryptoCurrency(ctx, k)
+			cryptos = append(cryptos, cc)
 		}
 	}
 
 	csr := &Currencies{}
-	res := csr.Create(cs, coins, golds, currencies["last_modified"])
+	res := csr.Create(cs, coins, golds, cryptos, currencies["last_modified"])
 
 	r.JSON(w, http.StatusOK, res)
 }
@@ -156,6 +186,17 @@ func RenderGoldResponse(ctx context.Context, w http.ResponseWriter, gold *provid
 	res := GoldResponse{
 		Status: true,
 		Gold:   GoldDetail{}.Create(gold),
+	}
+
+	r.JSON(w, http.StatusOK, res)
+}
+
+func RenderCryptoCurrencyResponse(ctx context.Context, w http.ResponseWriter, crypto *providers.Crypto) {
+	r := ctx.Value(3).(*render.Render)
+
+	res := CryptoResponse{
+		Status: true,
+		Crypto: CryptoDetail{}.Create(crypto),
 	}
 
 	r.JSON(w, http.StatusOK, res)
