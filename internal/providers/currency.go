@@ -25,6 +25,12 @@ type Gold struct {
 	Price float64
 }
 
+type Crypto struct {
+	Code  string
+	Name  string
+	Price float64
+}
+
 func GetCurrency(ctx context.Context, code string) (*Currency, error) {
 	currencies, err := GetCurrencies(ctx)
 	if err != nil || currencies == nil {
@@ -85,6 +91,24 @@ func GetGold(ctx context.Context, code string) (*Gold, error) {
 	}
 
 	return &Gold{
+		Code:  code,
+		Name:  CurrencyKeys[code]["name"],
+		Price: price,
+	}, nil
+}
+
+func GetCryptoCurrency(ctx context.Context, code string) (*Crypto, error) {
+	currencies, err := GetCurrencies(ctx)
+	if err != nil || currencies == nil {
+		return nil, err
+	}
+
+	price, err := strconv.ParseFloat(currencies[CurrencyKeys[code]["sell"]], 64)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Crypto{
 		Code:  code,
 		Name:  CurrencyKeys[code]["name"],
 		Price: price,
