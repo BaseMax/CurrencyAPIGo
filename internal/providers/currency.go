@@ -49,7 +49,7 @@ func GetCurrency(ctx context.Context, code string) (*Currency, error) {
 	}, nil
 }
 
-func GetCoin(ctx context.Context, code string) (*Coin, error) {
+func GetGoldCoin(ctx context.Context, code string) (*Coin, error) {
 	currencies, err := GetCurrencies(ctx)
 	if err != nil || currencies == nil {
 		return nil, err

@@ -114,7 +114,7 @@ func RenderCurrenciesResponse(ctx context.Context, w http.ResponseWriter, curren
 			c, _ := providers.GetCurrency(ctx, k)
 			cs = append(cs, c)
 		} else if slices.Contains(providers.GoldCoinList, k) {
-			gc, _ := providers.GetCoin(ctx, k)
+			gc, _ := providers.GetGoldCoin(ctx, k)
 			coins = append(coins, gc)
 		} else if slices.Contains(providers.GoldList, k) {
 			g, _ := providers.GetGold(ctx, k)

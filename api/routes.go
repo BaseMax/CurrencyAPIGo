@@ -37,7 +37,7 @@ func CurrencyHandler(w http.ResponseWriter, req *http.Request) {
 		responses.RenderCurrencyResponse(req.Context(), w, currency)
 		return
 	} else if slices.Contains(providers.GoldCoinList, name) {
-		coin, err := providers.GetCoin(req.Context(), name)
+		coin, err := providers.GetGoldCoin(req.Context(), name)
 		if err != nil {
 			responses.NotFoundError(req.Context(), w)
 			return
