@@ -6,7 +6,6 @@ import (
 
 	"github.com/itsjoniur/currency/internal/providers"
 	"github.com/itsjoniur/currency/internal/responses"
-	"github.com/itsjoniur/currency/pkg/utils"
 
 	"golang.org/x/exp/slices"
 )
@@ -30,14 +29,14 @@ func CurrencyHandler(w http.ResponseWriter, req *http.Request) {
 
 	name = strings.ToLower(name)
 
-	if slices.Contains(utils.MapKeyToSlice(providers.Currencies), name) {
+	if slices.Contains(providers.CurrencyList, name) {
 		currency, err := providers.GetCurrency(req.Context(), name)
 		if err != nil {
 			responses.NotFoundError(req.Context(), w)
 		}
 		responses.RenderCurrencyResponse(req.Context(), w, currency)
 		return
-	} else if slices.Contains(utils.MapKeyToSlice(providers.Coins), name) {
+	} else if slices.Contains(providers.GoldCoinList, name) {
 		coin, err := providers.GetCoin(req.Context(), name)
 		if err != nil {
 			responses.NotFoundError(req.Context(), w)
@@ -45,7 +44,7 @@ func CurrencyHandler(w http.ResponseWriter, req *http.Request) {
 		}
 		responses.RenderCoinResponse(req.Context(), w, coin)
 		return
-	} else if slices.Contains(utils.MapKeyToSlice(providers.Golds), name) {
+	} else if slices.Contains(providers.GoldList, name) {
 		gold, err := providers.GetGold(req.Context(), name)
 		if err != nil {
 			responses.NotFoundError(req.Context(), w)
