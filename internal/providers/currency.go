@@ -3,55 +3,6 @@ package providers
 import (
 	"context"
 	"strconv"
-	"strings"
-)
-
-var (
-	Currencies map[string]string = map[string]string{
-		"usd": "US Dollar",
-		"eur": "Euro",
-		"gbp": "British Pound",
-		"chf": "Swiss Franc",
-		"cad": "Canadian Dollar",
-		"aud": "Australian Dollar",
-		"sek": "Swedish Krona",
-		"nok": "Norwegian Krone",
-		"rub": "Russian Ruble",
-		"thb": "Thai Baht",
-		"sgd": "Singapore Dollar",
-		"hkd": "Hong Kong Dollar",
-		"azn": "Azerbaijani Manat",
-		"amd": "Armenian Dram",
-		"dkk": "Danish Krone",
-		"aed": "UAE Dirham",
-		"jpy": "Japanese Yen",
-		"try": "Turkish Lira",
-		"cny": "Chinese Yuan",
-		"sar": "KSA Rial",
-		"inr": "Indian Rupee",
-		"myr": "Ringgit",
-		"afn": "Afghan Afghani",
-		"kwd": "Kuwaiti Dinar",
-		"iqd": "Iraqi Dinar",
-		"bhd": "Bahraini Dinar",
-		"omr": "Omani Rial",
-		"qar": "Qatari Rial",
-	}
-
-	Coins map[string]string = map[string]string{
-		"azadi1":   "Azadi",
-		"azadi1_2": "Azadi 1/2",
-		"azadi1_4": "Azadi 1/4",
-		"emami1":   "Emami",
-		"azadi1g":  "Gerami",
-	}
-
-	Golds map[string]string = map[string]string{
-		"gol18":   "Gram",
-		"mithqal": "Mithqal",
-		"ounce":   "Ounce",
-		"bitcoin": "Bitcoin",
-	}
 )
 
 type Currency struct {
@@ -62,76 +13,80 @@ type Currency struct {
 }
 
 type Coin struct {
+	Code string
 	Name string
 	Sell int
 	Buy  int
 }
 
 type Gold struct {
+	Code  string
 	Name  string
 	Price float64
 }
 
-func GetCurrency(ctx context.Context, name string) (*Currency, error) {
+func GetCurrency(ctx context.Context, code string) (*Currency, error) {
 	currencies, err := GetCurrencies(ctx)
 	if err != nil || currencies == nil {
 		return nil, err
 	}
 
-	sell, err := strconv.Atoi(currencies[name+"1"])
+	sell, err := strconv.Atoi(currencies[CurrencyKeys[code]["sell"]])
 	if err != nil {
 		return nil, err
 	}
 
-	buy, err := strconv.Atoi(currencies[name+"2"])
+	buy, err := strconv.Atoi(currencies[CurrencyKeys[code]["buy"]])
 	if err != nil {
 		return nil, err
 	}
 
 	return &Currency{
-		Code: strings.ToTitle(name),
-		Name: Currencies[name],
+		Code: code,
+		Name: CurrencyKeys[code]["name"],
 		Sell: sell,
 		Buy:  buy,
 	}, nil
 }
 
-func GetCoin(ctx context.Context, name string) (*Coin, error) {
+func GetCoin(ctx context.Context, code string) (*Coin, error) {
 	currencies, err := GetCurrencies(ctx)
 	if err != nil || currencies == nil {
 		return nil, err
 	}
 
-	sell, err := strconv.Atoi(currencies[name])
+	sell, err := strconv.Atoi(currencies[CurrencyKeys[code]["sell"]])
 	if err != nil {
 		return nil, err
 	}
 
-	buy, err := strconv.Atoi(currencies[name+"2"])
+	buy, err := strconv.Atoi(currencies[CurrencyKeys[code]["buy"]])
 	if err != nil {
 		return nil, err
 	}
 
 	return &Coin{
-		Name: Coins[name],
+		Code: code,
+		Name: CurrencyKeys[code]["name"],
 		Sell: sell,
 		Buy:  buy,
 	}, nil
 }
 
-func GetGold(ctx context.Context, name string) (*Gold, error) {
+func GetGold(ctx context.Context, code string) (*Gold, error) {
 	currencies, err := GetCurrencies(ctx)
 	if err != nil || currencies == nil {
 		return nil, err
 	}
 
-	price, err := strconv.ParseFloat(currencies[name], 64)
+	price, err := strconv.ParseFloat(currencies[CurrencyKeys[code]["sell"]], 64)
 	if err != nil {
 		return nil, err
 	}
 
 	return &Gold{
-		Name:  Golds[name],
+		Code:  code,
+		Name:  CurrencyKeys[code]["name"],
 		Price: price,
 	}, nil
 }
