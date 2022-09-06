@@ -1,36 +1,50 @@
 # Currency API Go
-Currency API - show currencies & coins price powered by Golang
+
+Currency API - show currencies & coins price powered by Golang and Redis.
 
 ## Dependencies
+
 - Golang 1.18+
 - Redis v7
+
 ## Getting started
+
 ```bash
-git clone https://github.com/itsjoniur/CurrencyAPIGo.git
-cd CurrencyAPIGo
+$ git clone https://github.com/itsjoniur/CurrencyAPIGo.git
+$ cd CurrencyAPIGo
 ```
+
 - Rename .env.example to .env
 - change the Redis info with yours
+
 ```bash
-cd ./cmd/currency
-go run main.go
+$ cd ./cmd/currency
+$ go run main.go
 ```
+
 OR
+
 ### Run as a docker container
 
 ```bash
 $ docker-compose build --no-cache
 $ docker-compose up -d
 ```
+
 ## Routes
+
 `GET /`
-This route will show this README to show the features of the projects to everyone.
+
+This route will show this `README` to show the features of the projects to everyone.
 
 `GET /price`
-This route will show currencies/currency price
+
+This route will show the currencies' prices.
+
 - STRING `q`  (optional)
 
 Example response:
+
 ```json
 {
    "status": true,
@@ -57,7 +71,8 @@ Example response:
 }
 ```
 
-For specific currency:
+For a specific **currency**:
+
 ```json
 {
    "status": true,
@@ -70,7 +85,8 @@ For specific currency:
 }  
 ```
 
-For specific coin:
+For a specific **coin**:
+
 ```json
 {
    "status": true,
@@ -79,9 +95,11 @@ For specific coin:
 	   "sell": 12500,
 	   "buy": 12300
    }
-}  
+} 
 ```
-For specific gold:
+
+For a specific **gold**:
+
 ```json
 {
    "status": true,
@@ -91,7 +109,9 @@ For specific gold:
    }
 }  
 ```
+
 OR
+
 ```json
 {
    "status": false,
@@ -100,5 +120,6 @@ OR
 ```
 
 ## Authors
+
 - Its Joniur
 - Max Base

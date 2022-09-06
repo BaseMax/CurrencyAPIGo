@@ -6,12 +6,12 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
-	"github.com/go-redis/redis/v9"
 	"github.com/unrolled/render"
+	"github.com/go-redis/redis/v9"
+	"github.com/go-chi/chi/v5/middleware"
 
-	"github.com/itsjoniur/currency/internal/middlewares"
 	"github.com/itsjoniur/currency/internal/utils"
+	"github.com/itsjoniur/currency/internal/middlewares"
 )
 
 func StartAPI(logger *utils.Logger, storage *redis.Client, port string) {

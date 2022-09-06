@@ -1,16 +1,16 @@
 package main
 
 import (
-	"context"
+	"os"
 	"fmt"
 	"log"
-	"os"
+	"context"
 
-	"github.com/go-redis/redis/v9"
-	"github.com/itsjoniur/currency/api"
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
+	"github.com/go-redis/redis/v9"
 
+	"github.com/itsjoniur/currency/api"
 	"github.com/itsjoniur/currency/internal/utils"
 )
 
@@ -43,5 +43,4 @@ func main() {
 	logger := utils.NewLogger(logrus.New())
 
 	api.StartAPI(logger, rdb, port)
-
 }

@@ -4,10 +4,11 @@ import (
 	"net/http"
 	"strings"
 
+	"golang.org/x/exp/slices"
+
+	"github.com/itsjoniur/currency/pkg/utils"
 	"github.com/itsjoniur/currency/internal/providers"
 	"github.com/itsjoniur/currency/internal/responses"
-
-	"golang.org/x/exp/slices"
 )
 
 func RootHandler(w http.ResponseWriter, req *http.Request) {
