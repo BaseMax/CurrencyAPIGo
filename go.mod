@@ -9,6 +9,7 @@ require (
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
 	github.com/go-chi/chi/v5 v5.0.7 // indirect
 	github.com/go-redis/redis/v9 v9.0.0-beta.2 // indirect
+	github.com/gomarkdown/markdown v0.0.0-20220905174103-7b278df48cfb // indirect
 	github.com/joho/godotenv v1.4.0 // indirect
 	github.com/sirupsen/logrus v1.9.0 // indirect
 	github.com/unrolled/render v1.5.0 // indirect

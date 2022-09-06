@@ -1,9 +1,14 @@
 package api
 
 import (
+	"fmt"
+	"log"
 	"net/http"
+	"os"
+	"path"
 	"strings"
 
+	"github.com/gomarkdown/markdown"
 	"golang.org/x/exp/slices"
 
 	"github.com/itsjoniur/currency/internal/providers"
@@ -11,7 +16,22 @@ import (
 )
 
 func RootHandler(w http.ResponseWriter, req *http.Request) {
-	w.Write([]byte("documentation"))
+	wd, err := os.Getwd()
+	if err != nil {
+		log.Panicln("can not found root directory")
+	}
+
+	dat, err := os.ReadFile(path.Join(wd, "README.md"))
+	if err != nil {
+		fmt.Println(err)
+		responses.InternalServerError(req.Context(), w)
+	}
+
+	md := []byte(dat)
+	docs := markdown.ToHTML(md, nil, nil)
+	w.Header().Set("Content-Type", "text/html")
+	w.WriteHeader(http.StatusOK)
+	w.Write(docs)
 }
 
 func CurrencyHandler(w http.ResponseWriter, req *http.Request) {
