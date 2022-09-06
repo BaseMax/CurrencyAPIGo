@@ -8,17 +8,11 @@ import (
 	"github.com/go-redis/redis/v9"
 )
 
-var (
-	ctx = context.Background()
-)
-
 func LoadDataFromCache(storage *redis.Client, key string) (map[string]string, error) {
 	result := map[string]string{}
 
-	val, err := storage.Get(ctx, key).Result()
-	if err == redis.Nil {
-		return nil, nil
-	} else if err != nil {
+	val, err := storage.Get(context.Background(), key).Result()
+	if err != nil {
 		return nil, err
 	}
 
@@ -27,16 +21,16 @@ func LoadDataFromCache(storage *redis.Client, key string) (map[string]string, er
 }
 
 func CacheData(storage *redis.Client, key string, value any, ttl time.Duration) (bool, error) {
-	err := storage.Set(ctx, key, value, 0).Err()
+	err := storage.Set(context.Background(), key, value, 0).Err()
 	if err != nil {
 		return false, err
 	}
 
-	exp := storage.Expire(ctx, key, ttl*time.Second)
+	exp := storage.Expire(context.Background(), key, ttl*time.Second)
 	ok, _ := exp.Result()
 	if ok == false {
-		storage.Del(ctx, key)
-		return ok, err
+		storage.Del(context.Background(), key)
+		return false, err
 	}
 
 	return true, nil
