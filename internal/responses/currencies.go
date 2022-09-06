@@ -3,18 +3,20 @@ package responses
 import (
 	"context"
 	"net/http"
-	"strings"
+
+	"github.com/unrolled/render"
+	"golang.org/x/exp/slices"
 
 	"github.com/itsjoniur/currency/internal/providers"
 	"github.com/itsjoniur/currency/pkg/utils"
-	"github.com/unrolled/render"
 )
 
 type Currencies struct {
 	Status     bool                       `json:"status" default:"true"`
-	Currencies map[string]*CurrencyDetail `json:"Currencies"`
+	Currencies map[string]*CurrencyDetail `json:"currencies"`
 	Coins      map[string]*CoinDetail     `json:"coins"`
 	Golds      map[string]*GoldDetail     `json:"golds"`
+	Cryptos    map[string]*CryptoDetail   `json:"cryptos"`
 	LastModify string                     `json:"last_modify"`
 }
 
@@ -31,6 +33,11 @@ type CoinResponse struct {
 type GoldResponse struct {
 	Status bool        `json:"status"`
 	Gold   *GoldDetail `json:"gold"`
+}
+
+type CryptoResponse struct {
+	Status bool          `json:"status"`
+	Crypto *CryptoDetail `json:"crypto"`
 }
 
 type CurrencyDetail struct {
@@ -50,34 +57,42 @@ type GoldDetail struct {
 	Price float64 `json:"price"`
 }
 
-func (c Currencies) Create(currencies []*providers.Currency, coins []*providers.Coin, golds []*providers.Gold, lastModify string) *Currencies {
+type CryptoDetail struct {
+	Name  string  `json:"name"`
+	Price float64 `json:"price"`
+}
+
+func (c Currencies) Create(items map[string][]any, lastModify string) *Currencies {
 	c.Status = true
-	c.CreateCurrencies(currencies)
-	c.CreateCoins(coins)
-	c.CreateGolds(golds)
+	c.Currencies = make(map[string]*CurrencyDetail)
+	c.Coins = make(map[string]*CoinDetail)
+	c.Golds = make(map[string]*GoldDetail)
+	c.Cryptos = make(map[string]*CryptoDetail)
+
+	for k := range items {
+		c.CreateCurrencies(items[k])
+	}
+
 	c.LastModify = lastModify
 	return &c
 }
 
-func (c *Currencies) CreateCurrencies(cs []*providers.Currency) {
-	c.Currencies = make(map[string]*CurrencyDetail)
-	for i := 0; i < len(cs); i++ {
-		c.Currencies[strings.ToLower(cs[i].Code)] = CurrencyDetail{}.Create(cs[i])
-	}
-}
-
-func (c *Currencies) CreateCoins(coins []*providers.Coin) {
-	c.Coins = make(map[string]*CoinDetail)
-	for i := 0; i < len(coins); i++ {
-		name := strings.Replace(strings.ToLower(coins[i].Name), " ", "", 1)
-		c.Coins[name] = CoinDetail{}.Create(coins[i])
-	}
-}
-
-func (c *Currencies) CreateGolds(golds []*providers.Gold) {
-	c.Golds = make(map[string]*GoldDetail)
-	for i := 0; i < len(golds); i++ {
-		c.Golds[strings.ToLower(golds[i].Name)] = GoldDetail{}.Create(golds[i])
+func (c *Currencies) CreateCurrencies(currencies []any) {
+	for _, crncy := range currencies {
+		switch crncy.(type) {
+		case *providers.Currency:
+			currency := crncy.(*providers.Currency)
+			c.Currencies[currency.Code] = CurrencyDetail{}.Create(currency)
+		case *providers.Coin:
+			coin := crncy.(*providers.Coin)
+			c.Coins[coin.Code] = CoinDetail{}.Create(coin)
+		case *providers.Gold:
+			gold := crncy.(*providers.Gold)
+			c.Golds[gold.Code] = GoldDetail{}.Create(gold)
+		case *providers.Crypto:
+			crypto := crncy.(*providers.Crypto)
+			c.Cryptos[crypto.Code] = CryptoDetail{}.Create(crypto)
+		}
 	}
 }
 
@@ -104,35 +119,35 @@ func (c GoldDetail) Create(gold *providers.Gold) *GoldDetail {
 	return &c
 }
 
+func (c CryptoDetail) Create(crypto *providers.Crypto) *CryptoDetail {
+	c.Name = crypto.Name
+	c.Price = crypto.Price
+
+	return &c
+}
+
 func RenderCurrenciesResponse(ctx context.Context, w http.ResponseWriter, currencies map[string]string) {
-	var cs []*providers.Currency
-	var coins []*providers.Coin
-	var golds []*providers.Gold
+	items := map[string][]any{}
 	r := ctx.Value(3).(*render.Render)
 
-	for _, i := range utils.MapKeyToSlice(providers.Currencies) {
-		c, _ := providers.GetCurrency(ctx, i)
-		if c != nil {
-			cs = append(cs, c)
-		}
-	}
-
-	for _, i := range utils.MapKeyToSlice(providers.Coins) {
-		c, _ := providers.GetCoin(ctx, i)
-		if c != nil {
-			coins = append(coins, c)
-		}
-	}
-
-	for _, i := range utils.MapKeyToSlice(providers.Golds) {
-		g, _ := providers.GetGold(ctx, i)
-		if g != nil {
-			golds = append(golds, g)
+	for _, k := range utils.MapKeyToSlice(providers.CurrencyKeys) {
+		if slices.Contains(providers.CurrencyList, k) {
+			c, _ := providers.GetCurrency(ctx, k)
+			items["currency"] = append(items["currency"], c)
+		} else if slices.Contains(providers.GoldCoinList, k) {
+			gc, _ := providers.GetGoldCoin(ctx, k)
+			items["coins"] = append(items["coins"], gc)
+		} else if slices.Contains(providers.GoldList, k) {
+			g, _ := providers.GetGold(ctx, k)
+			items["golds"] = append(items["golds"], g)
+		} else if slices.Contains(providers.CryptoCurrencyList, k) {
+			cc, _ := providers.GetCryptoCurrency(ctx, k)
+			items["cryptos"] = append(items["cyptos"], cc)
 		}
 	}
 
 	csr := &Currencies{}
-	res := csr.Create(cs, coins, golds, currencies["last_modified"])
+	res := csr.Create(items, currencies["last_modified"])
 
 	r.JSON(w, http.StatusOK, res)
 }
@@ -165,6 +180,17 @@ func RenderGoldResponse(ctx context.Context, w http.ResponseWriter, gold *provid
 	res := GoldResponse{
 		Status: true,
 		Gold:   GoldDetail{}.Create(gold),
+	}
+
+	r.JSON(w, http.StatusOK, res)
+}
+
+func RenderCryptoCurrencyResponse(ctx context.Context, w http.ResponseWriter, crypto *providers.Crypto) {
+	r := ctx.Value(3).(*render.Render)
+
+	res := CryptoResponse{
+		Status: true,
+		Crypto: CryptoDetail{}.Create(crypto),
 	}
 
 	r.JSON(w, http.StatusOK, res)

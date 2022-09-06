@@ -1,6 +1,26 @@
+
 # Currency API Go
 
 Currency API - show currencies & coins price powered by Golang and Redis.
+
+## Supported currencies
+```
+Currencies:
+US Dollar, Euro, British Pound, UAE Dirham, Norwegian Krone, Qatari Rial, Swiss Franc,
+Thai Baht, Azerbaijani Manat, Hong Kong Dollar, Danish Krone, Turkish Lira, KSA Rial,
+Indian Rupee, Afghan Afghani, Omani Rial, Canadian Dollar, Japanese Yen, Iraqi Dinar, 
+Australian Dollar, Singapore Dollar, Chinese Yuan, Swedish Krone, Russian Ruble,
+Armenian Dram, Ringgit, Kuwaiti Dinar, Bahraini Dinar
+
+Coins:
+Azadi Coin,  Azadi Half a coin, Azadi Quarter a coin, Gerami Coin, Emami Coin,
+
+Gold:
+Gram, Ounce, Mithqal,
+
+Crypto currencies:
+Bitcoin
+```
 
 ## Dependencies
 
@@ -29,6 +49,11 @@ OR
 ```bash
 $ docker-compose build --no-cache
 $ docker-compose up -d
+
+[+] Running 3/3
+ ⠿ Container currencyapigo-redis-overcommit-1  Star...                                              0.2s
+ ⠿ Container currencyapigo-cache-1             Started                                              0.5s
+ ⠿ Container currencyapigo-web-1               Started                                              0.8s
 ```
 
 ## Routes
@@ -123,3 +148,4 @@ OR
 
 - Its Joniur
 - Max Base
+
