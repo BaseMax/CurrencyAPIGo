@@ -17,7 +17,14 @@ services:
     command: redis-server --save 20 1 --loglevel warning
     volumes:
       - cache:/data
-
+    depends_on:
+      - redis-overcommit
+  redis-overcommit:
+    build: https://github.com/bkuhl/redis-overcommit-on-host.git
+    restart: 'no'
+    privileged: true
+    volumes:
+      - /proc/sys/vm:/mnt/vm
 volumes:
   cache:
     driver: local
