@@ -9,10 +9,10 @@ import (
 	"strings"
 
 	"github.com/gomarkdown/markdown"
-	"golang.org/x/exp/slices"
 
 	"github.com/itsjoniur/currency/internal/providers"
 	"github.com/itsjoniur/currency/internal/responses"
+	"github.com/itsjoniur/currency/pkg/utils"
 )
 
 func RootHandler(w http.ResponseWriter, req *http.Request) {
@@ -47,24 +47,23 @@ func CurrencyHandler(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	name = strings.ToLower(name)
-
-	if slices.Contains(providers.CurrencyList, name) {
+	switch name = strings.ToLower(name); {
+	case utils.SliceContains(providers.CurrencyList, name):
 		currency, err := providers.GetCurrency(req.Context(), name)
 		if err != nil {
 			responses.NotFoundError(req.Context(), w)
 		}
 		responses.RenderCurrencyResponse(req.Context(), w, currency)
-		return
-	} else if slices.Contains(providers.GoldCoinList, name) {
+
+	case utils.SliceContains(providers.GoldCoinList, name):
 		coin, err := providers.GetGoldCoin(req.Context(), name)
 		if err != nil {
 			responses.NotFoundError(req.Context(), w)
 			return
 		}
 		responses.RenderCoinResponse(req.Context(), w, coin)
-		return
-	} else if slices.Contains(providers.GoldList, name) {
+
+	case utils.SliceContains(providers.GoldList, name):
 		gold, err := providers.GetGold(req.Context(), name)
 		if err != nil {
 			responses.NotFoundError(req.Context(), w)
@@ -72,13 +71,14 @@ func CurrencyHandler(w http.ResponseWriter, req *http.Request) {
 		}
 		responses.RenderGoldResponse(req.Context(), w, gold)
 
-	} else if slices.Contains(providers.CryptoCurrencyList, name) {
+	case utils.SliceContains(providers.CryptoCurrencyList, name):
 		crypto, err := providers.GetCryptoCurrency(req.Context(), name)
 		if err != nil {
 			responses.NotFoundError(req.Context(), w)
 		}
 		responses.RenderCryptoCurrencyResponse(req.Context(), w, crypto)
-	} else {
+
+	default:
 		responses.NotFoundError(req.Context(), w)
 	}
 }
