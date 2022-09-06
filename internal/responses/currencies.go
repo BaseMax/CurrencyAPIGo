@@ -78,19 +78,19 @@ func (c Currencies) Create(items map[string][]any, lastModify string) *Currencie
 }
 
 func (c *Currencies) CreateCurrencies(currencies []any) {
-	for i := 0; i < len(currencies); i++ {
-		switch currencies[i].(type) {
+	for _, crncy := range currencies {
+		switch crncy.(type) {
 		case *providers.Currency:
-			currency := currencies[i].(*providers.Currency)
+			currency := crncy.(*providers.Currency)
 			c.Currencies[currency.Code] = CurrencyDetail{}.Create(currency)
 		case *providers.Coin:
-			coin := currencies[i].(*providers.Coin)
+			coin := crncy.(*providers.Coin)
 			c.Coins[coin.Code] = CoinDetail{}.Create(coin)
 		case *providers.Gold:
-			gold := currencies[i].(*providers.Gold)
+			gold := crncy.(*providers.Gold)
 			c.Golds[gold.Code] = GoldDetail{}.Create(gold)
 		case *providers.Crypto:
-			crypto := currencies[i].(*providers.Crypto)
+			crypto := crncy.(*providers.Crypto)
 			c.Cryptos[crypto.Code] = CryptoDetail{}.Create(crypto)
 		}
 	}
