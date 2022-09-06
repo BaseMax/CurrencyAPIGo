@@ -40,6 +40,7 @@ func CurrencyHandler(w http.ResponseWriter, req *http.Request) {
 	if name == "" {
 		cs, err := providers.GetCurrencies(req.Context())
 		if err != nil {
+			fmt.Println(err)
 			responses.InternalServerError(req.Context(), w)
 			return
 		}

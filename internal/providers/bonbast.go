@@ -17,11 +17,7 @@ func GetCurrencies(ctx context.Context) (map[string]string, error) {
 	storage := ctx.Value(1).(*redis.Client)
 
 	result, err := utils.LoadDataFromCache(storage, "currencies")
-	if err != nil {
-		return nil, err
-	}
-
-	if result != nil {
+	if err == nil {
 		return result, nil
 	}
 

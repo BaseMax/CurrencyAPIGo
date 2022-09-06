@@ -1,9 +1,12 @@
 package providers
 
-type Map map[string]map[string]string
-type List []string
+type CurrencyData struct {
+	Name string
+	Sell string
+	Buy  string
+}
 
-var CurrencyList List = List{
+var CurrencyList = []string{
 	"usd", "eur", "gbp", "chf",
 	"cad", "aud", "sek", "nok",
 	"rub", "thb", "sgd", "hkd",
@@ -13,7 +16,7 @@ var CurrencyList List = List{
 	"iqd", "bhd", "omr", "qar",
 }
 
-var GoldCoinList List = List{
+var GoldCoinList = []string{
 	"azadi",
 	"azadi12",
 	"azadi14",
@@ -21,205 +24,201 @@ var GoldCoinList List = List{
 	"gerami",
 }
 
-var GoldList List = List{
+var GoldList = []string{
 	"gram",
 	"mithqal",
 	"ounce",
 }
 
-var CryptoCurrencyList List = List{
+var CryptoCurrencyList = []string{
 	"bitcoin",
 }
 
-var CurrencyKeys Map = Map{
-	"usd": {
-		"name": "US Dollar",
-		"sell": "usd1",
-		"buy":  "usd2",
+var CurrencyKeys = map[string]CurrencyData{
+	"usd": CurrencyData{
+		Name: "US Dollar",
+		Sell: "usd1",
+		Buy:  "usd2",
 	},
-	"eur": {
-		"name": "Euro",
-		"sell": "eur1",
-		"buy":  "eur2",
+	"eur": CurrencyData{
+		Name: "Euro",
+		Sell: "eur1",
+		Buy:  "eur2",
 	},
-	"gbp": {
-		"name": "British Pound",
-		"sell": "gbp1",
-		"buy":  "gbp2",
+	"gbp": CurrencyData{
+		Name: "British Pound",
+		Sell: "gbp1",
+		Buy:  "gbp2",
 	},
-	"chf": {
-		"name": "Swiss Franc",
-		"sell": "chf1",
-		"buy":  "chf2",
+	"chf": CurrencyData{
+		Name: "Swiss Franc",
+		Sell: "chf1",
+		Buy:  "chf2",
 	},
-	"cad": {
-		"name": "Canadian Dollar",
-		"sell": "cad1",
-		"buy":  "cad2",
+	"cad": CurrencyData{
+		Name: "Canadian Dollar",
+		Sell: "cad1",
+		Buy:  "cad2",
 	},
-	"aud": {
-		"name": "Australian Dollar",
-		"sell": "aud1",
-		"buy":  "aud2",
+	"aud": CurrencyData{
+		Name: "Australian Dollar",
+		Sell: "aud1",
+		Buy:  "aud2",
 	},
-	"sek": {
-		"name": "Swedish Krone",
-		"sell": "sek1",
-		"buy":  "sek2",
+	"sek": CurrencyData{
+		Name: "Swedish Krone",
+		Sell: "sek1",
+		Buy:  "sek2",
 	},
-	"nok": {
-		"name": "Norwegian Krone",
-		"sell": "nok1",
-		"buy":  "nok2",
+	"nok": CurrencyData{
+		Name: "Norwegian Krone",
+		Sell: "nok1",
+		Buy:  "nok2",
 	},
-	"rub": {
-		"name": "Russian Ruble",
-		"sell": "rub1",
-		"buy":  "rub2",
+	"rub": CurrencyData{
+		Name: "Russian Ruble",
+		Sell: "rub1",
+		Buy:  "rub2",
 	},
-	"thb": {
-		"name": "Thai Baht",
-		"sell": "thb1",
-		"buy":  "thb2",
+	"thb": CurrencyData{
+		Name: "Thai Baht",
+		Sell: "thb1",
+		Buy:  "thb2",
 	},
-	"sgd": {
-		"name": "Singapore Dollar",
-		"sell": "sgd1",
-		"buy":  "sgd2",
+	"sgd": CurrencyData{
+		Name: "Singapore Dollar",
+		Sell: "sgd1",
+		Buy:  "sgd2",
 	},
-	"hkd": {
-		"name": "Hong Kong Dollar",
-		"sell": "hkd1",
-		"buy":  "hkd2",
+	"hkd": CurrencyData{
+		Name: "Hong Kong Dollar",
+		Sell: "hkd1",
+		Buy:  "hkd2",
 	},
-	"azn": {
-		"name": "Azerbaijani Manat",
-		"sell": "azn1",
-		"buy":  "azn2",
+	"azn": CurrencyData{
+		Name: "Azerbaijani Manat",
+		Sell: "azn1",
+		Buy:  "azn2",
 	},
-	"amd": {
-		"name": "Armenian Dram",
-		"sell": "amd1",
-		"buy":  "amd2",
+	"amd": CurrencyData{
+		Name: "Armenian Dram",
+		Sell: "amd1",
+		Buy:  "amd2",
 	},
-	"dkk": {
-		"name": "Danish Krone",
-		"sell": "dkk1",
-		"buy":  "dkk2",
+	"dkk": CurrencyData{
+		Name: "Danish Krone",
+		Sell: "dkk1",
+		Buy:  "dkk2",
 	},
-	"aed": {
-		"name": "UAE Dirham",
-		"sell": "aed1",
-		"buy":  "aed2",
+	"aed": CurrencyData{
+		Name: "UAE Dirham",
+		Sell: "aed1",
+		Buy:  "aed2",
 	},
-	"jpy": {
-		"name": "Japanese Yen",
-		"sell": "jpy1",
-		"buy":  "jpy2",
+	"jpy": CurrencyData{
+		Name: "Japanese Yen",
+		Sell: "jpy1",
+		Buy:  "jpy2",
 	},
-	"try": {
-		"name": "Turkish Lira",
-		"sell": "try1",
-		"buy":  "try2",
+	"try": CurrencyData{
+		Name: "Turkish Lira",
+		Sell: "try1",
+		Buy:  "try2",
 	},
-	"cny": {
-		"name": "Chinese Yuan",
-		"sell": "cny1",
-		"buy":  "cny2",
+	"cny": CurrencyData{
+		Name: "Chinese Yuan",
+		Sell: "cny1",
+		Buy:  "cny2",
 	},
-	"sar": {
-		"name": "KSA Rial",
-		"sell": "sar1",
-		"buy":  "sar2",
+	"sar": CurrencyData{
+		Name: "KSA Rial",
+		Sell: "sar1",
+		Buy:  "sar2",
 	},
-	"inr": {
-		"name": "Indian Rupee",
-		"sell": "inr1",
-		"buy":  "inr2",
+	"inr": CurrencyData{
+		Name: "Indian Rupee",
+		Sell: "inr1",
+		Buy:  "inr2",
 	},
-	"myr": {
-		"name": "Ringgit",
-		"sell": "myr1",
-		"buy":  "myr2",
+	"myr": CurrencyData{
+		Name: "Ringgit",
+		Sell: "myr1",
+		Buy:  "myr2",
 	},
-	"afn": {
-		"name": "Afghan Afghani",
-		"sell": "afn1",
-		"buy":  "afn2",
+	"afn": CurrencyData{
+		Name: "Afghan Afghani",
+		Sell: "afn1",
+		Buy:  "afn2",
 	},
-	"kwd": {
-		"name": "Kuwaiti Dinar",
-		"sell": "kwd1",
-		"buy":  "kwd2",
+	"kwd": CurrencyData{
+		Name: "Kuwaiti Dinar",
+		Sell: "kwd1",
+		Buy:  "kwd2",
 	},
-	"iqd": {
-		"name": "Iraqi Dinar",
-		"sell": "iqd1",
-		"buy":  "iqd2",
+	"iqd": CurrencyData{
+		Name: "Iraqi Dinar",
+		Sell: "iqd1",
+		Buy:  "iqd2",
 	},
-	"bhd": {
-		"name": "Bahraini Dinar",
-		"sell": "bhd1",
-		"buy":  "bhd2",
+	"bhd": CurrencyData{
+		Name: "Bahraini Dinar",
+		Sell: "bhd1",
+		Buy:  "bhd2",
 	},
-	"omr": {
-		"name": "Omani Rial",
-		"sell": "omr1",
-		"buy":  "omr2",
+	"omr": CurrencyData{
+		Name: "Omani Rial",
+		Sell: "omr1",
+		Buy:  "omr2",
 	},
-	"qar": {
-		"name": "Qatari Rial",
-		"sell": "qar1",
-		"buy":  "qar2",
+	"qar": CurrencyData{
+		Name: "Qatari Rial",
+		Sell: "qar1",
+		Buy:  "qar2",
 	},
 	// Gold Coins
-	"azadi": {
-		"name": "Azadi Coin",
-		"sell": "azadi1",
-		"buy":  "azadi12",
+	"azadi": CurrencyData{
+		Name: "Azadi Coin",
+		Sell: "azadi1",
+		Buy:  "azadi12",
 	},
-	"azadi12": {
-		"name": "Azadi Half a coin",
-		"sell": "azadi1_2",
-		"buy":  "azadi1_22",
+	"azadi12": CurrencyData{
+		Name: "Azadi Half a coin",
+		Sell: "azadi1_2",
+		Buy:  "azadi1_22",
 	},
-	"azadi14": {
-		"name": "Azadi Quarter a coin",
-		"sell": "azadi1_4",
-		"buy":  "azadi1_42",
+	"azadi14": CurrencyData{
+		Name: "Azadi Quarter a coin",
+		Sell: "azadi1_4",
+		Buy:  "azadi1_42",
 	},
-	"emami": {
-		"name": "Emami Coin",
-		"sell": "emami1",
-		"buy":  "emami12",
+	"emami": CurrencyData{
+		Name: "Emami Coin",
+		Sell: "emami1",
+		Buy:  "emami12",
 	},
-	"gerami": {
-		"name": "Gerami Coin",
-		"sell": "azadi1g",
-		"buy":  "azadi1g2",
+	"gerami": CurrencyData{
+		Name: "Gerami Coin",
+		Sell: "azadi1g",
+		Buy:  "azadi1g2",
 	},
 	// Golds
 	// note: golds does not have buy price
-	"gram": {
-		"name": "Gram",
-		"sell": "gol18",
-		"buy":  "",
+	"gram": CurrencyData{
+		Name: "Gram",
+		Sell: "gol18",
 	},
-	"mithqal": {
-		"name": "Mithqal",
-		"sell": "mithqal",
-		"buy":  "",
+	"mithqal": CurrencyData{
+		Name: "Mithqal",
+		Sell: "mithqal",
 	},
-	"ounce": {
-		"name": "Ounce",
-		"sell": "ounce",
-		"buy":  "",
+	"ounce": CurrencyData{
+		Name: "Ounce",
+		Sell: "ounce",
 	},
 	// Crypto Currency
 	// note: Crypto Currencies does not have buy price
-	"bitcoin": {
-		"name": "Bitcoin",
-		"sell": "bitcoin",
-		"buy":  "",
+	"bitcoin": CurrencyData{
+		Name: "Bitcoin",
+		Sell: "bitcoin",
 	},
 }
