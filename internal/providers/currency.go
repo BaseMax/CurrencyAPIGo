@@ -2,6 +2,7 @@ package providers
 
 import (
 	"context"
+	"errors"
 	"strconv"
 )
 
@@ -33,8 +34,12 @@ type Crypto struct {
 
 func GetCurrency(ctx context.Context, code string) (*Currency, error) {
 	currencies, err := GetCurrencies(ctx)
-	if err != nil || currencies == nil {
+	if err != nil {
 		return nil, err
+	}
+
+	if currencies == nil {
+		return nil, errors.New("data is empty")
 	}
 
 	sell, err := strconv.Atoi(currencies[CurrencyKeys[code]["sell"]])
