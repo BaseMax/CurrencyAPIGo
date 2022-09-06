@@ -19,6 +19,7 @@ services:
       - cache:/data
     depends_on:
       - redis-overcommit
+
   redis-overcommit:
     build: https://github.com/bkuhl/redis-overcommit-on-host.git
     restart: 'no'
