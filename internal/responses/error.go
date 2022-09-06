@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"runtime"
 
-	"github.com/itsjoniur/currency/internal/utils"
-
 	"github.com/unrolled/render"
+
+	"github.com/itsjoniur/currency/internal/utils"
 )
 
 // Struct for error responses

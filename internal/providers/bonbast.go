@@ -9,6 +9,7 @@ import (
 
 	curl "github.com/andelf/go-curl"
 	"github.com/go-redis/redis/v9"
+
 	"github.com/itsjoniur/currency/internal/utils"
 )
 
