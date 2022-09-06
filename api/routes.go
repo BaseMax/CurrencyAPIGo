@@ -6,7 +6,6 @@ import (
 
 	"golang.org/x/exp/slices"
 
-	"github.com/itsjoniur/currency/pkg/utils"
 	"github.com/itsjoniur/currency/internal/providers"
 	"github.com/itsjoniur/currency/internal/responses"
 )
