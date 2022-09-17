@@ -35,7 +35,7 @@ $ cd CurrencyAPIGo
 ```
 
 - Rename .env.example to .env
-- change the Redis info with yours
+- Change the Redis information with yours
 
 ```bash
 $ cd ./cmd/currency
@@ -56,7 +56,7 @@ $ docker-compose up -d
  ⠿ Container currencyapigo-web-1               Started                                              0.8s
 ```
 
-## Routes
+## API Routes
 
 `GET /`
 
