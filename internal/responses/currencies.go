@@ -6,8 +6,8 @@ import (
 
 	"github.com/unrolled/render"
 
-	"github.com/itsjoniur/currency/internal/providers"
-	"github.com/itsjoniur/currency/pkg/utils"
+	"github.com/BaseMax/CurrencyAPIGo/internal/providers"
+	"github.com/BaseMax/CurrencyAPIGo/pkg/utils"
 )
 
 type Currencies struct {
