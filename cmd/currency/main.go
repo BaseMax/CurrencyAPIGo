@@ -10,8 +10,8 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/go-redis/redis/v9"
 
-	"github.com/itsjoniur/currency/api"
-	"github.com/itsjoniur/currency/internal/utils"
+	"github.com/BaseMax/CurrencyAPIGo/api"
+	"github.com/BaseMax/CurrencyAPIGo/internal/utils"
 )
 
 const (
