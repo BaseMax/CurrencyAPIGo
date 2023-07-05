@@ -8,7 +8,7 @@ import (
 
 	"github.com/unrolled/render"
 
-	"github.com/itsjoniur/currency/internal/utils"
+	"github.com/BaseMax/CurrencyAPIGo/internal/utils"
 )
 
 // Struct for error responses
