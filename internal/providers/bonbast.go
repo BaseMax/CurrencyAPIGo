@@ -10,7 +10,7 @@ import (
 	curl "github.com/andelf/go-curl"
 	"github.com/go-redis/redis/v9"
 
-	"github.com/itsjoniur/currency/internal/utils"
+	"github.com/BaseMax/CurrencyAPIGo/internal/utils"
 )
 
 func GetCurrencies(ctx context.Context) (map[string]string, error) {
